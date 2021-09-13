@@ -1,1 +1,1 @@
-# weather-dashboard-challenge-7
+# weather-dashboard-challenge-6
