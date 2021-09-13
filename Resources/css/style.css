@@ -1,0 +1,34 @@
+/*Universal and general selectors*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    padding: 10px 35px;
+    margin: 0 auto;
+    z-index: 9999;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: #045de9;
+    background-image: linear-gradient(315deg, #045de9 0%, #09c6f9 74%);
+}
+
+.container {
+    margin-top: 5px;
+}
+
+h1 {
+    color: white;
+    align-self: center;
+}
+
+.search-contain {
+    width: 25%;
+}
+
+.weather-contain {
+    border: 2px solid black;
+}
