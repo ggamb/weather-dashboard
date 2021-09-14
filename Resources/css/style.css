@@ -32,3 +32,10 @@ h1 {
 .weather-contain {
     border: 2px solid black;
 }
+
+.day-style {
+    border: 2px solid black;
+    margin: 0 10px;
+    background-color: cornflowerblue;
+    color: white;
+}
