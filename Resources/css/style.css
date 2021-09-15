@@ -33,9 +33,26 @@ h1 {
     border: 2px solid black;
 }
 
+.city-contain {
+    border: 2px solid black;
+    width: 50%;
+    border-radius: 15px;
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+
 .day-contain {
     display: flex;
     justify-content: space-between;
+}
+
+#search-value {
+    margin: 10px 0;
+    border: 2px solid black;
+}
+
+#search-button {
+    margin: 0 0 10px 0;
 }
 
 .day-style {
