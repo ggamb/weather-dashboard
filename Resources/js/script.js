@@ -1,3 +1,4 @@
+var currentDateEl = document.getElementById("current-date");
 var currentCityEl = document.getElementById("current-city");
 var currentTempEl = document.getElementById("current-temp");
 var currentWindEl = document.getElementById("current-wind");
@@ -18,13 +19,17 @@ function fetchWeather() {
     })
     .then(function(response) {
 
+        console.log("original", response);
+
+        console.log("epoch", response.dt);
+
+       var currentDate = moment().format("dddd, MMMM Do, YYYY");
+
+        currentDateEl.textContent = currentDate;
         currentCityEl.textContent = "City: " + response.name;
-        currentTempEl.textContent = "Temperature: " + response.main.temp + " °F";
-        currentWindEl.textContent = "Wind: " + response.wind.speed + " MPH";
+        currentTempEl.textContent = "Temperature: " + Math.round(response.main.temp) + " °F";
+        currentWindEl.textContent = "Wind: " + Math.round(response.wind.speed) + " MPH";
         currentHumidEl.textContent = "Humidity: " + response.main.humidity;
-
-
-        console.log(response.coord.lat, response.coord.lon);
         
         var uvKey = "https://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&units=imperial&appid=96c1c6d5967a45d7c06f700d5e294417";
         return fetch(uvKey)
@@ -58,14 +63,18 @@ function fetchWeather() {
 
         //Add additional information here
         for(var i = 1; i < 6; i++) {
+            
+            console.log(responseUV.daily[i].weather[0].icon);
+             
             var dayDiv = document.createElement("div");
+            var daysAway = moment().add(i, "days").format("Do, ddd");
             dayDiv.className = "col-2 day-style";
-            dayDiv.textContent = "Temp: " + responseUV.daily[i].temp.day + "\n"
-                                    + "Wind: " + responseUV.daily[i].wind_speed + "\n" 
-                                    + "Humidity: " + responseUV.daily[i].uvi;
+            dayDiv.innerHTML = daysAway + "<br/><img src=https://openweathermap.org/img/wn/" + responseUV.daily[i].weather[0].icon + "@2x.png><br/>Temp: " 
+                                    + Math.round(responseUV.daily[i].temp.day) + " °F<br/>"
+                                    + "Wind: " + Math.round(responseUV.daily[i].wind_speed) + " MPH<br/>" 
+                                    + "Humidity: " + responseUV.daily[i].humidity;
             dayContainEl.appendChild(dayDiv);
         }
-
     })
 
     

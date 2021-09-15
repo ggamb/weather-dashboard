@@ -33,6 +33,11 @@ h1 {
     border: 2px solid black;
 }
 
+.day-contain {
+    display: flex;
+    justify-content: space-between;
+}
+
 .day-style {
     border: 2px solid black;
     margin: 0 10px;
@@ -42,20 +47,25 @@ h1 {
 
 .uv-low {
     background-color: lightgreen;
+    padding: 0 5px;
 }
 
 .uv-moderate {
     background-color: yellow;
+    padding: 0 5px;
 }
 
 .uv-high {
     background-color: tomato;
+    padding: 0 5px;
 }
 
 .uv-very-high {
     background-color: red;
+    padding: 0 5px;
 }
 
 .uv-extreme {
     background-color: lightskyblue;
+    padding: 0 5px;
 }
