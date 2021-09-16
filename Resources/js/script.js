@@ -12,12 +12,17 @@ var dayContainEl = document.getElementById("day-contain");
 var searchCity = $(".searched-city");
 
 
+
+function sendToFetchWeather() {
+    var searchedCity = document.getElementById("search-value").value;
+    fetchWeather(searchedCity);
+    clearInput();
+}
+
 //Function to get and display weather now and five day forecast on search
-function fetchWeather() {
-    //Searches for user's search term on the Open Weather API for current weather
-    var searchValue = document.getElementById("search-value").value;
-    var cityKey = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=96c1c6d5967a45d7c06f700d5e294417";
-    
+function fetchWeather(cityToSearch) {
+    //Searches for user's search term on the Open Weather API for current weather  
+    var cityKey = "https://api.openweathermap.org/data/2.5/weather?q=" + cityToSearch + "&units=imperial&appid=96c1c6d5967a45d7c06f700d5e294417";
 
     fetch(cityKey)
     .then(function(response) {
@@ -34,7 +39,10 @@ function fetchWeather() {
         currentHumidEl.textContent = "Humidity: " + response.main.humidity;
 
         //Creates divs to show past searches
-        applyButton(response.name);
+        var newDay = document.createElement("button");
+        newDay.className = "searched-city";
+        newDay.textContent = response.name;
+        cityContainEl.appendChild(newDay);
         
         //Calls the five day forecast API using longitude and latitude from current weather search
         var uvKey = "https://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&units=imperial&appid=96c1c6d5967a45d7c06f700d5e294417";
@@ -83,32 +91,21 @@ function fetchWeather() {
     })
 }
 
-function applyButton(cityName) {
-    var newDay = document.createElement("button");
-    newDay.className = "searched-city";
-    newDay.textContent = cityName;
-    cityContainEl.appendChild(newDay);
-    
+function applyButton() {
     var cityContainer = $('#city-contain');
 
-    console.log("children", cityContainer);
-
     for(var i = 0; i < cityContainer.length; i++) {
-        $(cityContainer[i]).on("click", function() {
-            searchAgain(cityContainer[i-1].children[i-1].textContent);
+        $(cityContainer).on("click", function() {
+            console.log(cityContainer[i-1].children[i-1].textContent);
+            fetchWeather(cityContainer[i-1].children[i-1].textContent);
         })
     }
 }
 
-
-function searchAgain(searchAgainValue) {
-    var searchValue = document.getElementById("search-value").value;
-
-    console.log(searchValue);
-
-    searchValue = searchAgainValue;
-
-    console.log(searchValue);
+function clearInput() {
+    var searchedCity = document.getElementById("search-value");
+    searchedCity.value = "";
 }
 
-searchButtonEl.addEventListener("click", fetchWeather);
+searchButtonEl.addEventListener("click", sendToFetchWeather);
+applyButton();
