@@ -1,3 +1,4 @@
+//Selector variables
 var currentDateEl = document.getElementById("current-date");
 var cityContainEl = document.getElementById("city-contain");
 var currentCityEl = document.getElementById("current-city");
@@ -8,17 +9,22 @@ var currentUVEl = document.getElementById("current-uv");
 var uvIndexEl = document.getElementById("uv-color");
 var searchButtonEl = document.getElementById("search-button");
 var dayContainEl = document.getElementById("day-contain");
+var searchCity = $(".searched-city");
 
 
+//Function to get and display weather now and five day forecast on search
 function fetchWeather() {
+    //Searches for user's search term on the Open Weather API for current weather
     var searchValue = document.getElementById("search-value").value;
     var cityKey = "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&units=imperial&appid=96c1c6d5967a45d7c06f700d5e294417";
+    
 
     fetch(cityKey)
     .then(function(response) {
         return response.json();
     })
     .then(function(response) {
+        //Writes today's weather based on the response from the API
        var currentDate = moment().format("dddd, MMMM Do, YYYY");
 
         currentDateEl.textContent = currentDate;
@@ -27,11 +33,10 @@ function fetchWeather() {
         currentWindEl.textContent = "Wind: " + Math.round(response.wind.speed) + " MPH";
         currentHumidEl.textContent = "Humidity: " + response.main.humidity;
 
-        var newDay = document.createElement("div");
-        newDay.className = "city-contain";
-        newDay.textContent = response.name;
-        cityContainEl.appendChild(newDay);
+        //Creates divs to show past searches
+        applyButton(response.name);
         
+        //Calls the five day forecast API using longitude and latitude from current weather search
         var uvKey = "https://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&units=imperial&appid=96c1c6d5967a45d7c06f700d5e294417";
         return fetch(uvKey)
     })
@@ -40,7 +45,7 @@ function fetchWeather() {
     })
     .then(function(responseUV) {
         console.log("humid", responseUV);
-        
+        //Creates and applies color scheme for the UV index based on US EPA exposure guidance
         var uvIndex = responseUV.current.uvi;
 
         uvIndexEl.textContent = uvIndex;
@@ -60,12 +65,11 @@ function fetchWeather() {
         currentUVEl.textContent = "UV Index: ";
         currentUVEl.appendChild(uvIndexEl);
         
-        
+        //Removes previous search five day forecast containers
         dayContainEl.innerHTML = "";
 
+        //Creates five day forecast based on five day forecast API response
         for(var i = 1; i < 6; i++) {
-
-             
             var dayDiv = document.createElement("div");
             var daysAway = moment().add(i, "days").format("Do, ddd");
             dayDiv.className = "col-2 day-style";
@@ -76,14 +80,35 @@ function fetchWeather() {
                                 + "Humidity: " + responseUV.daily[i].humidity;
             dayContainEl.appendChild(dayDiv);
         }
-
-        
     })
+}
 
-
-
+function applyButton(cityName) {
+    var newDay = document.createElement("button");
+    newDay.className = "searched-city";
+    newDay.textContent = cityName;
+    cityContainEl.appendChild(newDay);
     
+    var cityContainer = $('#city-contain');
+
+    console.log("children", cityContainer);
+
+    for(var i = 0; i < cityContainer.length; i++) {
+        $(cityContainer[i]).on("click", function() {
+            searchAgain(cityContainer[i-1].children[i-1].textContent);
+        })
+    }
+}
+
+
+function searchAgain(searchAgainValue) {
+    var searchValue = document.getElementById("search-value").value;
+
+    console.log(searchValue);
+
+    searchValue = searchAgainValue;
+
+    console.log(searchValue);
 }
 
 searchButtonEl.addEventListener("click", fetchWeather);
-

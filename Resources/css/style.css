@@ -33,12 +33,14 @@ h1 {
     border: 2px solid black;
 }
 
-.city-contain {
+.searched-city {
     border: 2px solid black;
-    width: 50%;
+    width: 60%;
     border-radius: 15px;
     text-align: center;
     margin: 0 0 10px 0;
+    background-color: cornflowerblue;
+    color: white;
 }
 
 .day-contain {
