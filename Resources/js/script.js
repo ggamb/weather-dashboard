@@ -9,8 +9,7 @@ var currentUVEl = document.getElementById("current-uv");
 var uvIndexEl = document.getElementById("uv-color");
 var searchButtonEl = document.getElementById("search-button");
 var dayContainEl = document.getElementById("day-contain");
-var searchCity = $(".searched-city");
-
+var cityContainer = $(".searched-city");
 
 
 function sendToFetchWeather() {
@@ -89,23 +88,38 @@ function fetchWeather(cityToSearch) {
             dayContainEl.appendChild(dayDiv);
         }
     })
+
 }
 
-function applyButton() {
-    var cityContainer = $('#city-contain');
-
-    for(var i = 0; i < cityContainer.length; i++) {
-        $(cityContainer).on("click", function() {
-            console.log(cityContainer[i-1].children[i-1].textContent);
-            fetchWeather(cityContainer[i-1].children[i-1].textContent);
-        })
-    }
-}
+/*function applyButton() {
+        
+    
+}*/
 
 function clearInput() {
     var searchedCity = document.getElementById("search-value");
     searchedCity.value = "";
 }
 
+
+function searchAgain() {
+    let container = document.getElementById("city-contain");
+
+
+    for (let i = 0, len = container.children.length; i < len; i++)
+    {
+        container.children[i].onclick = function(){
+            console.log(container.children[i].textContent);
+            fetchWeather(container.children[i].textContent);
+        }
+    }
+}
+
+
+
+$(cityContainEl).on("click", $(".searched-city"), function() {
+    searchAgain();
+})
+
+
 searchButtonEl.addEventListener("click", sendToFetchWeather);
-applyButton();
