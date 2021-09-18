@@ -1,4 +1,4 @@
-//Selector variables
+//Selector and global variables
 var currentDateEl = document.getElementById("current-date");
 var cityContainEl = document.getElementById("city-contain");
 var currentCityEl = document.getElementById("current-city");
@@ -9,10 +9,11 @@ var currentUVEl = document.getElementById("current-uv");
 var uvIndexEl = document.getElementById("uv-color");
 var searchButtonEl = document.getElementById("search-button");
 var dayContainEl = document.getElementById("day-contain");
+
+//Global array
 var cityContainer = $(".searched-city");
-var searchedCityArray = [];
 
-
+//Searches for city when start button is clicked
 function sendToFetchWeather() {
     var searchedCity = document.getElementById("search-value").value;
     fetchWeather(searchedCity);
@@ -23,28 +24,22 @@ function sendToFetchWeather() {
 function fetchWeather(cityToSearch) {
     //Searches for user's search term on the Open Weather API for current weather  
     var cityKey = "https://api.openweathermap.org/data/2.5/weather?q=" + cityToSearch + "&units=imperial&appid=96c1c6d5967a45d7c06f700d5e294417";
-
+    
     fetch(cityKey)
     .then(function(response) {
         return response.json();
     })
     .then(function(response) {
         //Writes today's weather based on the response from the API
-       var currentDate = moment().format("dddd, MMMM Do, YYYY");
-
+        var currentDate = moment().format("dddd, MMMM Do, YYYY");
+        
+        currentCityEl.innerHTML = response.name + "<img src=https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png>";
         currentDateEl.textContent = currentDate;
-        currentCityEl.textContent = "City: " + response.name;
         currentTempEl.textContent = "Temperature: " + Math.round(response.main.temp) + " °F";
         currentWindEl.textContent = "Wind: " + Math.round(response.wind.speed) + " MPH";
         currentHumidEl.textContent = "Humidity: " + response.main.humidity;
 
-        //Creates divs to show past searches
-        var newDay = document.createElement("button");
-        newDay.className = "searched-city";
-        newDay.textContent = response.name;
-        cityContainEl.appendChild(newDay);
-
-        //Saves city name in localStorage
+        //If the search is new, adds button with city name and saves city name in localStorage
         addIfNew(response.name);
         
         //Calls the five day forecast API using longitude and latitude from current weather search
@@ -55,11 +50,12 @@ function fetchWeather(cityToSearch) {
         return responseUV.json();
     })
     .then(function(responseUV) {
-        console.log("humid", responseUV);
         //Creates and applies color scheme for the UV index based on US EPA exposure guidance
         var uvIndex = responseUV.current.uvi;
 
         uvIndexEl.textContent = uvIndex;
+
+        $("#uv-color").removeClass("uv-low uv-moderate uv-high uv-very-high uv-extreme");
         
         if(uvIndex < 2) {
             uvIndexEl.classList.add("uv-low");
@@ -92,20 +88,24 @@ function fetchWeather(cityToSearch) {
             dayContainEl.appendChild(dayDiv);
         }
     })
-
+    .catch(function(error) {
+        console.log(error);
+        currentDateEl.textContent = "Please type in a valid city!";
+        currentCityEl.textContent = "";
+        currentTempEl.textContent = "";
+        currentWindEl.textContent = "";
+        currentHumidEl.textContent = "";
+        currentUVEl.textContent = "";
+    })
 }
 
-/*function applyButton() {
-        
-    
-}*/
-
+//Clears input after search
 function clearInput() {
     var searchedCity = document.getElementById("search-value");
     searchedCity.value = "";
 }
 
-
+//Searches for a clicked recent searches button
 function searchAgain() {
     var container = document.getElementById("city-contain");
 
@@ -116,40 +116,45 @@ function searchAgain() {
     }
 }
 
+//Searches for a city is the button is clicked
 $(cityContainEl).on("click", $(".searched-city"), function() {
     searchAgain();
 })
 
+//Adds a button if a unique city is searched
+//Also adds the search to localStorage to appear next time page is loaded
 function addIfNew(cityName) {
-    console.log("before",searchedCityArray);
+    var searchedCityArray = JSON.parse(localStorage.getItem("cities")) || [];
+
+    if(!searchedCityArray.includes(cityName)) {
+        var newDay = document.createElement("button");
+        newDay.className = "searched-city";
+        newDay.textContent = cityName;
+        cityContainEl.appendChild(newDay);
+    }   
 
     if(!searchedCityArray.includes(cityName)) {
         searchedCityArray.push(cityName);
     }    
     
-    console.log(searchedCityArray);
     addToLocalStorage(cityName);
 }
 
+//Adds a search to localStorage if unique
 function addToLocalStorage(cityName) { 
     //Gets localStorage or creates an array
     var savedArray = JSON.parse(localStorage.getItem("cities")) || [];
 
     if(!savedArray.includes(cityName)) {
         savedArray.push(cityName);
-    }    
-    
+    }
 
     localStorage.setItem("cities", JSON.stringify(savedArray));
 }
 
-
+//Loads localStorage on visiting site
 function loadLocalStorage() {
-    var localArray = JSON.parse(localStorage.getItem("cities")) || []
-    //Adds the new search to the saved array if it hasnt been searched before
-    /*if(!savedArray.includes(cityName)) {
-        savedArray.push(cityName);
-    }   */
+    var localArray = JSON.parse(localStorage.getItem("cities")) || [];
     
     //Creates buttons for all cities in local storage
     for(var i = 0; i < localArray.length; i++) {
@@ -160,6 +165,6 @@ function loadLocalStorage() {
     }
 }
 
-
+//Starts localStorage function and creates listener for search button
 searchButtonEl.addEventListener("click", sendToFetchWeather);
 loadLocalStorage();
