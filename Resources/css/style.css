@@ -22,20 +22,19 @@ header {
 
 h1 {
     color: white;
-    align-self: center;
 }
 
+/*Search container styling*/
 .search-contain {
     width: 25%;
     border: 2px solid black;
     min-height: 468px;
 }
 
-.weather-contain {
-    border: 2px solid black;
-    margin-left: 10px;
-    background-color: cornflowerblue;
-    color: white;
+#city-contain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .searched-city {
@@ -49,10 +48,31 @@ h1 {
     text-align: center;
 }
 
-#city-contain {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#search-value {
+    margin: 10px 0;
+    border: 2px solid black;
+    width: 100%;
+}
+
+#search-button {
+    margin: 0 0 10px 0;
+    width: 100%;
+    background-color: cornflowerblue;
+    color: white;
+}
+
+#divide {
+    margin-top: 2px;
+    margin-bottom: 10px;
+    border: .01rem solid black;
+}
+
+/*Current date styling*/
+.weather-contain {
+    border: 2px solid black;
+    margin-left: 10px;
+    background-color: cornflowerblue;
+    color: white;
 }
 
 #current-city{
@@ -72,35 +92,14 @@ h1 {
 #current-humid,
 #current-uv {
     font-size: medium;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    line-height: 2;
 }
 
+/*Styling for UV color*/
 #uv-color {
     color: black;
-}
-
-.day-contain {
-    display: flex;
-    justify-content: space-between;
-}
-
-#search-value {
-    margin: 10px 0;
-    border: 2px solid black;
-    width: 100%;
-}
-
-#search-button {
-    margin: 0 0 10px 0;
-    width: 100%;
-    background-color: cornflowerblue;
-    color: white;
-}
-
-.day-style {
-    border: 2px solid black;
-    margin: 0 10px;
-    background-color: cornflowerblue;
-    color: white;
 }
 
 .uv-low {
@@ -131,4 +130,20 @@ h1 {
     background-color: lightskyblue;
     padding: 0 10px;
     border-radius: 10px;
+}
+
+/*Styling for forecase*/
+.day-contain {
+    display: flex;
+    justify-content: space-between;
+    line-height: 2;
+}
+
+.day-style {
+    border: 2px solid black;
+    margin: 0 10px;
+    background-color: cornflowerblue;
+    color: white;
+    text-align: center;
+    flex-basis: 17%;
 }

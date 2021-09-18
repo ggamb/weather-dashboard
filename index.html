@@ -5,18 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./Resources/css/style.css">
-        <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <title>Weather Dashboard</title>
 </head>
 <body>
     <header>
         <h1>Weather Dashboard</h1>
     </header>
+    <!--Bootstrap containers, rows, and columns for the HTML skeleton-->
     <div class="container">
         <div class="row">
+            <!--Search form, button, and past search container-->
             <div class="search-contain col-3">
                 <h2>Search for a city:</h2>
                 <input id="search-value" type="text" placeholder="Try Boston or Tokyo"></input>
@@ -25,15 +24,16 @@
 
                 <button id="search-button">Search</button>
 
-                <br/>
+                <hr id="divide">
 
                 <div id="city-contain">
                 </div>
 
             </div>
-
+            
             <div class= "col-9">
                 <div class="row">
+                    <!--Shows today's weather-->
                     <div id="weather-contain" class="weather-contain col-12">
                             <div id="current-date">
                             </div>
@@ -57,23 +57,19 @@
                     </div>                    
                 </div>
                 
-    
+                <!--Shows five day forecast-->
                 <div class="row">
                     <h3 class="col-12">Five-Day Forecast:</h3>
+                    <div id="day-contain" class="day-contain col-12">
+                    </div>
                 </div>
                 
-                <div id="day-contain" class="day-contain row">
-                </div>
+
             </div>
         </div>
 
-        <div class="row">
-
-
-        </div>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <script src="./Resources/js/script.js"></script>
-    
 </body>
 </html>

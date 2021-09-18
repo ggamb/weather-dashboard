@@ -79,7 +79,7 @@ function fetchWeather(cityToSearch) {
         for(var i = 1; i < 6; i++) {
             var dayDiv = document.createElement("div");
             var daysAway = moment().add(i, "days").format("Do, ddd");
-            dayDiv.className = "col-2 day-style";
+            dayDiv.className = "day-style";
             dayDiv.innerHTML = daysAway 
                                 + "<br/><img src=https://openweathermap.org/img/wn/" + responseUV.daily[i].weather[0].icon + "@2x.png><br/>"
                                 + "Temp: " + Math.round(responseUV.daily[i].temp.day) + " °F<br/>"
