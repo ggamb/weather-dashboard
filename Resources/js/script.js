@@ -10,6 +10,7 @@ var uvIndexEl = document.getElementById("uv-color");
 var searchButtonEl = document.getElementById("search-button");
 var dayContainEl = document.getElementById("day-contain");
 var cityContainer = $(".searched-city");
+var searchedCityArray = [];
 
 
 function sendToFetchWeather() {
@@ -42,6 +43,9 @@ function fetchWeather(cityToSearch) {
         newDay.className = "searched-city";
         newDay.textContent = response.name;
         cityContainEl.appendChild(newDay);
+
+        //Saves city name in localStorage
+        addIfNew(response.name);
         
         //Calls the five day forecast API using longitude and latitude from current weather search
         var uvKey = "https://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&units=imperial&appid=96c1c6d5967a45d7c06f700d5e294417";
@@ -103,23 +107,59 @@ function clearInput() {
 
 
 function searchAgain() {
-    let container = document.getElementById("city-contain");
+    var container = document.getElementById("city-contain");
 
-
-    for (let i = 0, len = container.children.length; i < len; i++)
-    {
+    for (let i = 0, len = container.children.length; i < len; i++) {
         container.children[i].onclick = function(){
-            console.log(container.children[i].textContent);
             fetchWeather(container.children[i].textContent);
         }
     }
 }
 
-
-
 $(cityContainEl).on("click", $(".searched-city"), function() {
     searchAgain();
 })
 
+function addIfNew(cityName) {
+    console.log("before",searchedCityArray);
+
+    if(!searchedCityArray.includes(cityName)) {
+        searchedCityArray.push(cityName);
+    }    
+    
+    console.log(searchedCityArray);
+    addToLocalStorage(cityName);
+}
+
+function addToLocalStorage(cityName) { 
+    //Gets localStorage or creates an array
+    var savedArray = JSON.parse(localStorage.getItem("cities")) || [];
+
+    if(!savedArray.includes(cityName)) {
+        savedArray.push(cityName);
+    }    
+    
+
+    localStorage.setItem("cities", JSON.stringify(savedArray));
+}
+
+
+function loadLocalStorage() {
+    var localArray = JSON.parse(localStorage.getItem("cities")) || []
+    //Adds the new search to the saved array if it hasnt been searched before
+    /*if(!savedArray.includes(cityName)) {
+        savedArray.push(cityName);
+    }   */
+    
+    //Creates buttons for all cities in local storage
+    for(var i = 0; i < localArray.length; i++) {
+        var newDay = document.createElement("button");
+        newDay.className = "searched-city";
+        newDay.textContent = localArray[i];
+        cityContainEl.appendChild(newDay);
+    }
+}
+
 
 searchButtonEl.addEventListener("click", sendToFetchWeather);
+loadLocalStorage();
