@@ -9,6 +9,7 @@ var currentUVEl = document.getElementById("current-uv");
 var uvIndexEl = document.getElementById("uv-color");
 var searchButtonEl = document.getElementById("search-button");
 var dayContainEl = document.getElementById("day-contain");
+var forecastContainEl = document.getElementById("forecast-contain");
 
 //Global array
 var cityContainer = $(".searched-city");
@@ -96,6 +97,8 @@ function fetchWeather(cityToSearch) {
         currentWindEl.textContent = "";
         currentHumidEl.textContent = "";
         currentUVEl.textContent = "";
+        forecastContainEl.textContent = "";
+        dayContainEl.innerHTML = "";
     })
 }
 
